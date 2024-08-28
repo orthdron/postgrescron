@@ -10,5 +10,14 @@ RUN apt-get update && apt-get install -y postgresql-16-cron && \
 # Add pg_cron to shared_preload_libraries
 RUN echo "shared_preload_libraries = 'pg_cron'" >> /usr/share/postgresql/postgresql.conf.sample
 
-# Set up entrypoint to create extension
-COPY ./init-pg-cron.sh /docker-entrypoint-initdb.d/
+# Copy custom postgresql.conf
+COPY postgresql.conf /etc/postgresql/postgresql.conf
+
+# Copy initialization script
+COPY init-pg-cron.sh /docker-entrypoint-initdb.d/
+
+# Set permissions for the init script
+RUN chmod +x /docker-entrypoint-initdb.d/init-pg-cron.sh
+
+# Use custom postgresql.conf
+CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
