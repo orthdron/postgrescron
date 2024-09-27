@@ -1,4 +1,4 @@
-FROM postgres:16-bullseye
+FROM postgres:17-bullseye
 
 # Update package list and install necessary packages
 RUN apt-get update \
